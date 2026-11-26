@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddToCollectionRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\MediaResource;
 use App\Http\Resources\UserResource;
 use App\Models\Media;
@@ -14,6 +15,22 @@ class UserController extends Controller
     public function index()
     {
         return UserResource::collection(User::all());
+    }
+
+    // POST /api/users
+    public function store(StoreUserRequest $request)
+    {
+        $user = User::create($request->validated());
+
+        return (new UserResource($user))->response()->setStatusCode(201);
+    }
+
+    // PATCH /api/users/{user}
+    public function update(StoreUserRequest $request, User $user)
+    {
+        $user->update($request->validated());
+
+        return new UserResource($user);
     }
 
     // GET /api/users/{user}/collection
